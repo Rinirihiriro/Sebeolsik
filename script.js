@@ -1,4 +1,4 @@
-﻿/*
+/*
 */
 
 var first_glyph = "ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ";
@@ -10,7 +10,7 @@ var korean_code_end = 0xD7A0;
 var first_w = second_glyph.length * last_glyph.length;
 var second_w = last_glyph.length;
 
-var enko_map = {
+var qwerty_map = {
 	 '`':'*',	'1':'ㅎ',	'2':'ㅆ',	'3':'ㅂ',	'4':'ㅛ',	'5':'ㅠ',	'6':'ㅑ',	'7':'ㅖ'
 	,'8':'ㅢ',	'9':'ㅜ',	'0':'ㅋ',	'-':')',	'=':'>',	'q':'ㅅ',	'w':'ㄹ',	'e':'ㅕ'
 	,'r':'ㅐ',	't':'ㅓ',	'y':'ㄹ',	'u':'ㄷ',	'i':'ㅁ',	'o':'ㅊ',	'p':'ㅍ',	'[':'('
@@ -26,7 +26,27 @@ var enko_map = {
 	,'V':'ㄳ',	'B':'?',	'N':'-',	'M':'\"',	'<':',',	'>':'.',	'?':'!'
 };
 
-var first_glyph_keys = "0yuiophjkl;'nm";
+var colemak_map = {
+	 '`':'*',	'1':'ㅎ',	'2':'ㅆ',	'3':'ㅂ',	'4':'ㅛ',	'5':'ㅠ',	'6':'ㅑ',	'7':'ㅖ'
+	,'8':'ㅢ',	'9':'ㅜ',	'0':'ㅋ',	'-':')',	'=':'>',	'q':'ㅅ',	'w':'ㄹ',	'f':'ㅕ'
+	,'p':'ㅐ',	'g':'ㅓ',	'j':'ㄹ',	'l':'ㄷ',	'u':'ㅁ',	'y':'ㅊ',	';':'ㅍ',	'[':'('
+	,']':'<',	'\\':':',	'a':'ㅇ',	'r':'ㄴ',	's':'ㅣ',	't':'ㅏ',	'd':'ㅡ',	'h':'ㄴ'
+	,'n':'ㅇ',	'e':'ㄱ',	'i':'ㅈ',	'o':'ㅂ',	'\'':'ㅌ',	'z':'ㅁ',	'x':'ㄱ',	'c':'ㅔ'
+	,'v':'ㅗ',	'b':'ㅜ',	'k':'ㅅ',	'm':'ㅎ',	',':',',	'.':'.',	'/':'ㅗ'
+
+	,'~':'※',	'!':'ㄲ',	'@':'ㄺ',	'#':'ㅈ',	'$':'ㄿ',	'%':'ㄾ',	'^':'=',	'&':'“'
+	,'*':'”',	'(':'\'',	')':'~',	'_':';',	'+':'+',	'Q':'ㅍ',	'W':'ㅌ',	'F':'ㄵ'
+	,'P':'ㅀ',	'G':'ㄽ',	'J':'5',	'L':'6',	'U':'7',	'Y':'8',	':':'9',	'{':'%'
+	,'}':'/',	'|':'\\',	'A':'ㄷ',	'R':'ㄶ',	'S':'ㄼ',	'T':'ㄻ',	'D':'ㅒ',	'H':'0'
+	,'N':'1',	'E':'2',	'I':'3',	'O':'4',	'\"':'·',	'Z':'ㅊ',	'X':'ㅄ',	'C':'ㅋ'
+	,'V':'ㄳ',	'B':'?',	'K':'-',	'M':'\"',	'<':',',	'>':'.',	'?':'!'
+};
+
+var enko_map = qwerty_map;
+
+var first_glyph_keys_qwerty = "0yuiophjkl;'nm";
+var first_glyph_keys_colemak = "0jluy;hneio'km";
+var first_glyph_keys = first_glyph_keys_qwerty;
 
 var composing_rule = [
 	[
@@ -150,6 +170,22 @@ function glyph2enchar(glyph, type) {
 	return enchar;
 }
 
+function changeType(name)
+{
+    //qwerty
+    if(name == "QWERTY")
+    {
+        enko_map = qwerty_map;
+        first_glyph_keys = first_glyph_keys_qwerty;
+    }
+    //colemak
+    else if(name == "COLEMAK")
+    {
+        enko_map = colemak_map;
+        first_glyph_keys = first_glyph_keys_colemak;
+    }
+}
+
 function toKo() {
 	var src = document.getElementById("en-text").value + ' ';
 	var dst = document.getElementById("ko-text");
@@ -241,7 +277,7 @@ function toKo() {
 
 
 function toEn() {
-	var src = document.getElementById("ko-text").value;
+    var src = document.getElementById("ko-text").value;
 	var dst = document.getElementById("en-text");
 	
 	var out = "";
